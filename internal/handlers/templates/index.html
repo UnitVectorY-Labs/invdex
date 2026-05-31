@@ -1,0 +1,23 @@
+{{template "layout.html" .}}
+{{define "content"}}
+<div class="sidebar">
+    <aside class="sidebar-nav">
+        <h3>Filter by Tag</h3>
+        <ul>
+            <li><a href="/" hx-get="/items" hx-target="#items-grid" hx-push-url="true">All Items</a></li>
+            {{range .Tags}}
+            <li><a href="#" hx-get="/items?tag={{.Name}}" hx-target="#items-grid" hx-push-url="false">{{.Name}}</a></li>
+            {{end}}
+        </ul>
+    </aside>
+    <div>
+        <div class="search-bar">
+            <input type="text" name="q" placeholder="Search items..."
+                hx-get="/search" hx-trigger="keyup changed delay:300ms" hx-target="#items-grid">
+        </div>
+        <div id="items-grid">
+            {{template "items_list.html" .}}
+        </div>
+    </div>
+</div>
+{{end}}

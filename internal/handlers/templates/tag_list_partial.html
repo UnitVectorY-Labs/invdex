@@ -1,0 +1,30 @@
+{{if .Tags}}
+<table style="width: 100%; border-collapse: collapse;">
+    <thead>
+        <tr style="border-bottom: 1px solid var(--border);">
+            <th style="text-align: left; padding: 0.75rem; font-size: 0.875rem; color: var(--text-muted);">Name</th>
+            <th style="text-align: left; padding: 0.75rem; font-size: 0.875rem; color: var(--text-muted);">Category</th>
+            <th style="text-align: right; padding: 0.75rem; font-size: 0.875rem; color: var(--text-muted);">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{range .Tags}}
+        <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.75rem;">
+                <span class="tag">{{.Name}}</span>
+            </td>
+            <td style="padding: 0.75rem; color: var(--text-muted); font-size: 0.875rem;">
+                {{if .Category}}{{.Category}}{{else}}<em>Uncategorized</em>{{end}}
+            </td>
+            <td style="padding: 0.75rem; text-align: right;">
+                <button class="btn btn-danger" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"
+                    hx-delete="/tags/{{.ID}}" hx-target="#tag-list" hx-swap="innerHTML"
+                    hx-confirm="Delete tag '{{.Name}}'?">Delete</button>
+            </td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>
+{{else}}
+<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No tags yet. Add one above to get started.</p>
+{{end}}

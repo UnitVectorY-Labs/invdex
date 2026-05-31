@@ -1,0 +1,52 @@
+{{template "layout.html" .}}
+{{define "content"}}
+<div class="card">
+    <div class="page-header">
+        <h2>{{.Item.Title}}</h2>
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="/items/{{.Item.ID}}/edit" class="btn btn-outline">Edit</a>
+            <button class="btn btn-danger" hx-delete="/items/{{.Item.ID}}" hx-confirm="Are you sure you want to delete this item?">Delete</button>
+        </div>
+    </div>
+
+    {{if .Item.ImageURL}}
+    <img src="{{.Item.ImageURL}}" alt="{{.Item.Title}}" class="detail-image">
+    {{end}}
+
+    <div style="margin-bottom: 1rem;">
+        <h3 style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">Description</h3>
+        <p>{{if .Item.Description}}{{.Item.Description}}{{else}}<em style="color: var(--text-muted);">No description</em>{{end}}</p>
+    </div>
+
+    {{if .Item.Tags}}
+    <div style="margin-bottom: 1rem;">
+        <h3 style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">Tags</h3>
+        <div class="tags">
+            {{range .Item.Tags}}
+            <span class="tag">{{.}}</span>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+
+    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+        Added: {{.Item.CreatedAt.Format "Jan 2, 2006 3:04 PM"}} · Updated: {{.Item.UpdatedAt.Format "Jan 2, 2006 3:04 PM"}}
+    </div>
+</div>
+
+<!-- LLM Chat for this item -->
+<div class="card" style="margin-top: 1rem; background: #f0f9ff;">
+    <h3 style="margin-bottom: 0.75rem;">🤖 Ask about this item</h3>
+    <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+            <div class="chat-message assistant">
+                I can help you learn more about "{{.Item.Title}}". Ask me about its value, rarity, history, or anything else!
+            </div>
+        </div>
+        <form class="chat-input" hx-post="/llm/chat" hx-target="#chat-messages" hx-swap="beforeend" hx-on::after-request="this.reset(); document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;">
+            <input type="text" name="message" placeholder="Ask about this item..." autocomplete="off">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</div>
+{{end}}

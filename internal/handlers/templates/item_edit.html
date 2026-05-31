@@ -1,0 +1,62 @@
+{{template "layout.html" .}}
+{{define "content"}}
+<div class="card">
+    <div class="page-header">
+        <h2>Edit Item</h2>
+    </div>
+
+    <form hx-put="/items/{{.Item.ID}}" hx-encoding="application/x-www-form-urlencoded">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="title" name="title" value="{{.Item.Title}}" required>
+                <button type="button" class="btn btn-outline" hx-post="/llm/suggest" hx-include="#title" hx-target="#suggestions">
+                    ✨ Suggest
+                </button>
+            </div>
+        </div>
+
+        <div id="suggestions"></div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description">{{.Item.Description}}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Image</label>
+            {{if .Item.ImageURL}}
+            <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">Current image is set. Upload a new one to replace it.</p>
+            <input type="hidden" name="image_url" value="{{.Item.ImageURL}}">
+            {{end}}
+            <div id="upload-area">
+                <div class="upload-area" onclick="document.getElementById('file-input').click()">
+                    <p>Click to upload a new image</p>
+                    <p style="font-size: 0.75rem; color: var(--text-muted);">PNG, JPG, WEBP up to 32MB</p>
+                </div>
+                <input type="file" id="file-input" name="image" accept="image/*" style="display: none;"
+                    hx-post="/items/upload" hx-encoding="multipart/form-data" hx-target="#upload-area" hx-swap="innerHTML">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Tags</label>
+            <div class="tags" style="margin-bottom: 0.5rem;">
+                {{$itemTags := .Item.Tags}}
+                {{range .Tags}}
+                <label style="cursor: pointer;">
+                    <input type="checkbox" name="tags" value="{{.Name}}"
+                        {{if contains $itemTags .Name}}checked{{end}}> {{.Name}}
+                </label>
+                {{end}}
+            </div>
+            <input type="text" name="custom_tags" placeholder="Add custom tags (comma separated)">
+        </div>
+
+        <div style="display: flex; gap: 0.5rem;">
+            <button type="submit" class="btn btn-primary">Update Item</button>
+            <a href="/items/{{.Item.ID}}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{{end}}
