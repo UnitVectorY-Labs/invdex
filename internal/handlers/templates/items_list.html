@@ -1,0 +1,27 @@
+{{if .Items}}
+<div class="grid">
+    {{range .Items}}
+    <div class="item-card">
+        {{if .ImageURL}}
+        <img src="{{.ImageURL}}" alt="{{.Title}}" loading="lazy">
+        {{else}}
+        <div class="no-image">No Image</div>
+        {{end}}
+        <div class="item-content">
+            <h3><a href="/items/{{.ID}}">{{.Title}}</a></h3>
+            <p>{{if gt (len .Description) 100}}{{slice .Description 0 100}}...{{else}}{{.Description}}{{end}}</p>
+            <div class="tags">
+                {{range .Tags}}
+                <span class="tag">{{.}}</span>
+                {{end}}
+            </div>
+        </div>
+    </div>
+    {{end}}
+</div>
+{{else}}
+<div class="card" style="text-align: center; padding: 3rem;">
+    <p style="color: var(--text-muted); margin-bottom: 1rem;">No items in your inventory yet.</p>
+    <a href="/items/new" class="btn btn-primary">+ Add Your First Item</a>
+</div>
+{{end}}

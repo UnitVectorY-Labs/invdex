@@ -1,0 +1,25 @@
+<div class="suggestion-card">
+    <h4>✨ AI Suggestions</h4>
+    {{if .Suggestion}}
+    <div style="margin-bottom: 0.75rem;">
+        <strong>Title:</strong> {{.Suggestion.Title}}
+        <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.125rem 0.5rem; margin-left: 0.5rem;"
+            onclick="document.getElementById('title').value = '{{.Suggestion.Title}}'">Use</button>
+    </div>
+    <div style="margin-bottom: 0.75rem;">
+        <strong>Description:</strong> {{.Suggestion.Description}}
+        <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.125rem 0.5rem; margin-left: 0.5rem;"
+            onclick="document.getElementById('description').value = '{{.Suggestion.Description}}'">Use</button>
+    </div>
+    {{if .Suggestion.Tags}}
+    <div>
+        <strong>Suggested Tags:</strong>
+        <div class="tags" style="margin-top: 0.5rem;">
+            {{range .Suggestion.Tags}}
+            <span class="tag">{{.}}</span>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+    {{end}}
+</div>

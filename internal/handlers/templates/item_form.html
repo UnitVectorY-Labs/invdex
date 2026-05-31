@@ -1,0 +1,75 @@
+{{template "layout.html" .}}
+{{define "content"}}
+<div class="card">
+    <div class="page-header">
+        <h2>Add New Item</h2>
+    </div>
+
+    <!-- LLM Assistant Chat -->
+    <div class="card" style="margin-bottom: 1.5rem; background: #f0f9ff;">
+        <h3 style="margin-bottom: 0.75rem;">🤖 AI Assistant</h3>
+        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Ask the AI to help identify your item, suggest tags, or provide details about collectables.
+        </p>
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="chat-message assistant">
+                    Hi! I can help you catalog your collectable. Describe your item or ask me anything about it.
+                </div>
+            </div>
+            <form class="chat-input" hx-post="/llm/chat" hx-target="#chat-messages" hx-swap="beforeend" hx-on::after-request="this.reset(); document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;">
+                <input type="text" name="message" placeholder="Describe your item or ask a question..." autocomplete="off">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <form hx-post="/items" hx-encoding="application/x-www-form-urlencoded">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="title" name="title" placeholder="e.g., 1st Edition Charizard Holographic" required>
+                <button type="button" class="btn btn-outline" hx-post="/llm/suggest" hx-include="#title" hx-target="#suggestions">
+                    ✨ Suggest
+                </button>
+            </div>
+        </div>
+
+        <div id="suggestions"></div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" placeholder="Describe the item, its condition, notable features..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Image</label>
+            <div id="upload-area">
+                <div class="upload-area" onclick="document.getElementById('file-input').click()">
+                    <p>Click to upload an image</p>
+                    <p style="font-size: 0.75rem; color: var(--text-muted);">PNG, JPG, WEBP up to 32MB</p>
+                </div>
+                <input type="file" id="file-input" name="image" accept="image/*" style="display: none;"
+                    hx-post="/items/upload" hx-encoding="multipart/form-data" hx-target="#upload-area" hx-swap="innerHTML">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Tags</label>
+            <div class="tags" style="margin-bottom: 0.5rem;">
+                {{range .Tags}}
+                <label style="cursor: pointer;">
+                    <input type="checkbox" name="tags" value="{{.Name}}"> {{.Name}}
+                </label>
+                {{end}}
+            </div>
+            <input type="text" name="custom_tags" placeholder="Add custom tags (comma separated)">
+        </div>
+
+        <div style="display: flex; gap: 0.5rem;">
+            <button type="submit" class="btn btn-primary">Save Item</button>
+            <a href="/" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{{end}}
