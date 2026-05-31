@@ -43,7 +43,7 @@ just build
 just test
 
 # Run locally (requires PostgreSQL and storage backend)
-DATABASE_URL="******localhost:5432/invdex" go run .
+DATABASE_URL="postgresql://user:password@localhost:5432/invdex" go run .
 ```
 
 ## Architecture

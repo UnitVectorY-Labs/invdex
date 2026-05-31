@@ -371,7 +371,8 @@ func (h *Handler) handleUploadImage(w http.ResponseWriter, r *http.Request) {
 
 	// Return the key as a hidden input for the form
 	w.Header().Set("Content-Type", "text/html")
-	io.WriteString(w, `<input type="hidden" name="image_url" value="`+key+`">
+	escapedKey := template.HTMLEscapeString(key)
+	io.WriteString(w, `<input type="hidden" name="image_url" value="`+escapedKey+`">
 <div class="upload-success">
 	<span class="icon">✓</span> Image uploaded successfully
 </div>`)
