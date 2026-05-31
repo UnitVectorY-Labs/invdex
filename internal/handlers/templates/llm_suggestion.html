@@ -4,12 +4,12 @@
     <div style="margin-bottom: 0.75rem;">
         <strong>Title:</strong> {{.Suggestion.Title}}
         <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.125rem 0.5rem; margin-left: 0.5rem;"
-            onclick="document.getElementById('title').value = '{{.Suggestion.Title}}'">Use</button>
+            onclick="document.getElementById('title').value = this.getAttribute('data-value')" data-value="{{.Suggestion.Title}}">Use</button>
     </div>
     <div style="margin-bottom: 0.75rem;">
         <strong>Description:</strong> {{.Suggestion.Description}}
         <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.125rem 0.5rem; margin-left: 0.5rem;"
-            onclick="document.getElementById('description').value = '{{.Suggestion.Description}}'">Use</button>
+            onclick="document.getElementById('description').value = this.getAttribute('data-value')" data-value="{{.Suggestion.Description}}">Use</button>
     </div>
     {{if .Suggestion.Tags}}
     <div>

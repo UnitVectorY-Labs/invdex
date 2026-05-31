@@ -194,7 +194,9 @@ func (db *DB) ListItems(ctx context.Context, tagFilter string) ([]*models.Item, 
 
 // SearchItems searches items by title or description.
 func (db *DB) SearchItems(ctx context.Context, query string) ([]*models.Item, error) {
-	searchQuery := "%" + strings.ToLower(query) + "%"
+	// Escape special LIKE characters
+	escaped := strings.NewReplacer("%", "\\%", "_", "\\_").Replace(query)
+	searchQuery := "%" + strings.ToLower(escaped) + "%"
 	rows, err := db.pool.Query(ctx,
 		`SELECT id, title, description, image_url, created_at, updated_at FROM items
 		WHERE LOWER(title) LIKE $1 OR LOWER(description) LIKE $1

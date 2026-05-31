@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -79,7 +80,8 @@ func main() {
 	// Health check endpoint
 	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"status":"ok","version":"` + Version + `"}`))
+		resp := map[string]string{"status": "ok", "version": Version}
+		json.NewEncoder(w).Encode(resp)
 	})
 
 	server := &http.Server{
