@@ -1,0 +1,10 @@
+name: invdex
+default_branch: main
+config:
+  description: "A personal inventory system powered by LLMs to aid in searching and inventorying."
+  license: MIT
+  language: go
+  release: docker-go
+  justfile: true
+  release_github: false
+  status: wip
